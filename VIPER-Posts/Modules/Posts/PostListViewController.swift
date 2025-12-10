@@ -71,4 +71,9 @@ extension PostListViewController: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.text = post.title
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let post = posts[indexPath.row]
+        presenter?.didSelectPost(id: post.id)
+    }
 }

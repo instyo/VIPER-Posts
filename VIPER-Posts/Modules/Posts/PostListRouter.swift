@@ -7,9 +7,13 @@
 
 import UIKit
 
-protocol PostListRouterInput {}
+protocol PostListRouterInput: AnyObject {
+    static func createModule() -> UIViewController
+    func navigateToDetail(id: Int)
+}
 
 class PostListRouter: PostListRouterInput {
+    
     weak var viewController: UIViewController?
     
     static func createModule() -> UIViewController {
@@ -29,4 +33,10 @@ class PostListRouter: PostListRouterInput {
         
         return UINavigationController(rootViewController: view)
     }
+    
+    func navigateToDetail(id: Int) {
+        let detailVC = PostDetailRouter.createModule(id: id)
+        viewController?.navigationController?.pushViewController(detailVC, animated: true)
+    }
+
 }

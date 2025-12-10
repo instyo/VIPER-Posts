@@ -9,6 +9,7 @@ import UIKit
 
 protocol PostListPresenterInput {
     func viewDidLoad()
+    func didSelectPost(id: Int)
 }
 
 protocol PostListPresenterOutput: AnyObject {
@@ -19,7 +20,7 @@ protocol PostListPresenterOutput: AnyObject {
 class PostListPresenter: PostListPresenterInput {
     weak var view: PostListPresenterOutput?
     var interactor: PostListInteractorInput!
-    weak var router: PostListRouter?
+    var router: PostListRouter?
     
     private var posts: [PostItem] = []
     private var errorMessage: String?
@@ -28,6 +29,10 @@ class PostListPresenter: PostListPresenterInput {
         Task {
             await interactor.loadPosts()
         }
+    }
+    
+    func didSelectPost(id: Int) {
+        router?.navigateToDetail(id: id)
     }
     
 }
