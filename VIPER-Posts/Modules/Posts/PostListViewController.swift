@@ -11,6 +11,8 @@ class PostListViewController: UIViewController {
     var presenter: PostListPresenterInput!
     
     private let tableView = UITableView()
+    private let loadingIndicator = UIActivityIndicatorView()
+    
     private var posts: [PostItem] = []
     
     override func viewDidLoad() {
@@ -19,6 +21,7 @@ class PostListViewController: UIViewController {
         view.backgroundColor = .systemBackground
         presenter.viewDidLoad()
         setupTable()
+        setupLoadingIndicator()
     }
     
     private func setupTable() {
@@ -28,6 +31,18 @@ class PostListViewController: UIViewController {
         tableView.delegate = self
         view.addSubview(tableView)
     }
+    
+    private func setupLoadingIndicator() {
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.startAnimating()
+        view.addSubview(loadingIndicator)
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
 }
 
 extension PostListViewController: PostListPresenterOutput {
@@ -35,11 +50,13 @@ extension PostListViewController: PostListPresenterOutput {
         DispatchQueue.main.async { [weak self] in
             self?.posts = posts
             self?.tableView.reloadData()
+            self?.loadingIndicator.stopAnimating()
         }
     }
     
     func showError(_ message: String) {
         DispatchQueue.main.async { [weak self] in
+            self?.loadingIndicator.stopAnimating()
             let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self?.present(alert, animated: true)

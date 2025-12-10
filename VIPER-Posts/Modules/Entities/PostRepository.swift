@@ -16,7 +16,7 @@ final class PostRepositoryImpl: PostRepository {
     private let client = APIClient()
     
     func fetchAll() async throws -> [PostItem] {
-        let urlString = "https://jsonplaceholder.typicode.com/postsX"
+        let urlString = "https://jsonplaceholder.typicode.com/posts"
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
         }
