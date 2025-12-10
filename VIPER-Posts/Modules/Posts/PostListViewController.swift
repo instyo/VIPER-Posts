@@ -47,20 +47,16 @@ class PostListViewController: UIViewController {
 
 extension PostListViewController: PostListPresenterOutput {
     func showPosts(_ posts: [PostItem]) {
-        DispatchQueue.main.async { [weak self] in
-            self?.posts = posts
-            self?.tableView.reloadData()
-            self?.loadingIndicator.stopAnimating()
-        }
+        self.posts = posts
+        self.tableView.reloadData()
+        self.loadingIndicator.stopAnimating()
     }
     
     func showError(_ message: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self?.present(alert, animated: true)
-        }
+        self.loadingIndicator.stopAnimating()
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
     }
 }
 

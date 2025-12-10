@@ -19,7 +19,7 @@ protocol PostListPresenterOutput: AnyObject {
 class PostListPresenter: PostListPresenterInput {
     weak var view: PostListPresenterOutput?
     var interactor: PostListInteractorInput!
-    var router: PostListRouter!
+    weak var router: PostListRouter?
     
     private var posts: [PostItem] = []
     private var errorMessage: String?
@@ -34,12 +34,16 @@ class PostListPresenter: PostListPresenterInput {
 
 extension PostListPresenter: PostListInteractorOutput {
     func didLoadPosts(_ posts: [PostItem]) {
-        self.posts = posts
-        view?.showPosts(posts)
+        DispatchQueue.main.async { [weak self] in
+            self?.posts = posts
+            self?.view?.showPosts(posts)
+        }
     }
     
     func didLoadPostsError(_ message: String) {
-        self.errorMessage = message
-        view?.showError(message)
+        DispatchQueue.main.async { [weak self] in
+            self?.errorMessage = message
+            self?.view?.showError(message)
+        }
     }
 }
