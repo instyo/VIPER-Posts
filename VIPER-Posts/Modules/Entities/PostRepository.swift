@@ -9,6 +9,7 @@ import Foundation
 
 protocol PostRepository {
     func fetchAll() async throws -> [PostItem]
+    func fetchDetail(id: Int) async throws -> PostItem
 }
 
 final class PostRepositoryImpl: PostRepository {
@@ -24,5 +25,17 @@ final class PostRepositoryImpl: PostRepository {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         return try await client.get(request)
-    }    
+    }
+    
+    func fetchDetail(id: Int) async throws -> PostItem {
+        let urlString = "https://jsonplaceholder.typicode.com/posts/\(id)"
+        
+        guard let url = URL(string: urlString) else {
+            throw APIError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        return try await client.get(request)
+    }
 }
